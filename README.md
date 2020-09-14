@@ -136,15 +136,6 @@ const loader = sdk.getVideoListLoader();
 const videos = await loader.next();
 }
 ```
-
-### 비디오 삭제하기
-
-비디오 삭제한다.
-
-```javascript
-await sdk.deleteVideo(videoKey);
-```
-    
     
 ## License 
 MIT
