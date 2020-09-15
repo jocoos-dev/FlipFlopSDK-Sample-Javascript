@@ -3,8 +3,9 @@
 Live Commerce Javascript SDK 
 
 ## 설치
+```
 npm i -s flipflop-sdk-javascript
-
+```
 ## 사용법
 ### 라이브러리 가져오기
 
@@ -106,7 +107,7 @@ const histories = await player.getChatHistory()
 
 ### 방송 보기 이벤트 콜백
 ```javascript
- PlayerDelegate {
+PlayerDelegate {
     // 방송 준비 이벤트
     onPrepared(player)
     // 방송 시작 이벤트
@@ -134,8 +135,25 @@ const histories = await player.getChatHistory()
 ```javascript
 const loader = sdk.getVideoListLoader();
 const videos = await loader.next();
-}
 ```
-    
+
+
+### Sample 실행 방법
+```
+cd sample
+npm i
+npm start
+```
+
+- appKey와 appSecret은 https://flipflop.tv 에서 발급받은 appKey 와 appSecret을 입력해 주세요.
+- 브라우저에서 아래의 주소로 접속하면 확인할 수 있습니다.
+
+http://localhost:3000?appKey=${appKey}&appSecret=${appSecret}
+
+- 이런 에러가 발생하면, node_modules를 모두 삭제하고, `npm i`로 전체 재설치를 합니다.
+```
+Error: Cannot find module '../scripts/start'
+```
+
 ## License 
 MIT

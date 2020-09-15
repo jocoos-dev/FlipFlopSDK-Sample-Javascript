@@ -1,0 +1,44 @@
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Java class files
+*.class
+*.log*
+
+# Eclipse project files
+.classpath
+.project
+
+# generated files
+bin/
+gen/
+out/
+build/
+
+# modules
+node_modules/
+hello-react/
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+/sdk/dist
+/sdk/output
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
