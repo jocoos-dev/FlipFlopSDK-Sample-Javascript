@@ -3,26 +3,37 @@ import ChatItem from './ChatItem'
 
 class ChatList extends React.Component {
 
+  shouldComponentUpdate(nextProps) { 
+    if (nextProps.messages.length !== this.props.messages.length) { 
+      if (this.scroller) {
+        this.scroller.scrollIntoView({block: "end"});
+      }
+      return true; 
+    }
+    return false; 
+  } 
+
   render() {
+    const { type } = this.props;
     console.log(this.props.messages)
     let items
     
     if (this.props.messages.length > 0) {
       items = this.props.messages.map((m, index) => (
-        <ChatItem key={index} message={m} />
+        <ChatItem type={type} key={index} message={m} />
       ))
     } else {
       const no_message = {
         message: 'Preparing for chat messages...'
       }
-      items = <ChatItem key={0} message={no_message} />
+      items = <ChatItem type={type} key={0} message={no_message} />
     }
 
     return (
       <div className="video-chat">
-        <div id="message-scroller" className="list-group chat-group">
+        <div id="message-scroller" ref={ scroller => this.scroller = scroller } className="list-group chat-group">
           { this.props.empty ? 
-          <ChatItem key={0} message={{
+          <ChatItem type={type} key={0} message={{
             message: 'There are no chat messages.'
           }} /> :
           items }

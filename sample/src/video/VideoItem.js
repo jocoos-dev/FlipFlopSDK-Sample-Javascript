@@ -11,6 +11,7 @@ class VideoItem extends React.Component {
 
   render() {
     const { video } = this.props
+    console.log("video", video.user.username)
     // const thumbnailUrl = video.title.startsWith('Sample Live title...') ? Configs.DEFAULT_THUMBNAIL : video.thumbnail_url
     const thumbnailStyle = {
       background: `url(${Configs.DEFAULT_THUMBNAIL}) center center / contain no-repeat`,
@@ -34,11 +35,11 @@ class VideoItem extends React.Component {
           <div className="card-body">
             <div className="card-text video-title">{`[${video.video_key}] ${video.title}`}</div>
             <div>
-              {video.user_avatar_url !== '' ?
-              <img className="user-avatar" src={video.user_avatar_url} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> : 
-              <img className="user-avatar" src={this.default_avatar} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/>
+              {video.user.profile_photo_url !== '' ?
+              <img className="user-avatar" src={video.user.profile_photo_url} alt={video.user.username === '' ? 'user avatar' : `${video.user.username} \\'s avatar'`}/> : 
+              <img className="user-avatar" src={this.default_avatar} alt={video.user.username === '' ? 'user avatar' : `${video.user.username} \\'s avatar'`}/>
               }
-              <span className="card-text text-muted user-name text-ellipsis" data-tooltip={video.user_id}>{video.user_name === '' ? '...' : video.user_name}</span>
+              <span className="card-text text-muted user-name text-ellipsis" data-tooltip={video.user.user_id}>{video.user.username === '' ? '...' : video.user.username}</span>
             </div>
           </div>
         </div>

@@ -4,12 +4,10 @@ import { bindActionCreators } from 'redux';
 import { actions as videoActions } from '../modules/video'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FlipFlop } from 'flipflop-sdk-javascript-dev/dist/flipflop'
+import { FlipFlop } from 'flipflop-sdk-javascript/dist/flipflop'
 
 const PARAM_APP_KEY = 'appKey'
 const PARAM_APP_SECRET = 'appSecret'
-const PARAM_USER_ID = 'userId'
-const PARAM_USER_NAME = 'userName'
 
 class VideoList extends React.Component {
   state = {
@@ -32,14 +30,21 @@ class VideoList extends React.Component {
       return;
     }
 
-    const userId = urlParams.get(PARAM_USER_ID) || '12345'
-    const userName = urlParams.get(PARAM_USER_NAME) || 'testuser'
+    const randomUserId = Math.floor(Math.random() * 10001)
+    let userId = localStorage.getItem('demo.user_id')
+    let userName = localStorage.getItem('demo.user_name')
 
+    if(!userId) {
+      userId = randomUserId
+      localStorage.setItem('demo.user_id', userId);
+    }
+
+    if(!userName) {
+      userName = 'user-' + randomUserId
+      localStorage.setItem('demo.user_name', userName);
+    }
+    
     console.log(`appKey: ${appKey}, appSecret: ${appSecret}, userId: ${userId}, userName: ${userName}`)
-
-    if (appKey !== null && appSecret !== null) {
-      localStorage.clear()
-    } 
 
     // For tests
     await this.initToken(appKey, appSecret, userId, userName);
@@ -62,15 +67,14 @@ class VideoList extends React.Component {
 
     localStorage.setItem('demo.app_key', appKey)
     localStorage.setItem('demo.app_secret', appSecret)
-    localStorage.setItem('demo.user_id', userId)
-    localStorage.setItem('demo.user_name', userName)
     
     this.props.actions.setSdk(this.sdk)
   }
 
   addScrollEvent = (callback) => {
     window.onscroll = function(ev) {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      if (window.scrollY + document.documentElement.clientHeight
+        > document.documentElement.scrollHeight - 200) {
         callback()
       }
     };
@@ -114,9 +118,11 @@ class VideoList extends React.Component {
   }
 
   render() {
-    const { userId, appKey, appSecret } = this.state
+    const { userId, appKey, appSecret, videos } = this.state
 
-    const items = this.state.videos.map((v, index) =>
+    console.log(videos)
+
+    const items = videos.map((v, index) =>
       <VideoItem key={index} video={v} link={`/videos/${v.video_key}?appKey=${appKey}&appSecret=${appSecret}`}/>
     )
 

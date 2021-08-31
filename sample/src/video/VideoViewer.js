@@ -2,14 +2,18 @@ import React from 'react';
 import 'video.js/dist/video-js.css';
 import 'video.js';
 import ChatList from './ChatList';
-import Configs from '../Configs';
 import moment from 'moment';
 import ChatForm from './ChatForm';
 import GoodsItem from './GoodsItem';
 import { bindActionCreators } from 'redux';
 import { actions as videoActions } from '../modules/video'
 import { connect } from 'react-redux';
-import { FlipFlop } from 'flipflop-sdk-javascript-dev/dist/flipflop'
+import { FlipFlop } from 'flipflop-sdk-javascript/dist/flipflop'
+import LiveBadge from '../svg/LiveBadge';
+import HlsBadge from '../svg/HlsBadge';
+import "./VideoViewer.css"
+import WebrtcBadge from '../svg/WebrtcBadge';
+import Configs from '../Configs';
 
 
 const PARAM_APP_KEY = 'appKey'
@@ -31,7 +35,6 @@ class VideoViewer extends React.Component {
   }
 
   initToken = async (video) => {
-    console.log(video)
     const urlParams = new URLSearchParams(window.location.search);
     const appKey = urlParams.get(PARAM_APP_KEY)
     const appSecret = urlParams.get(PARAM_APP_SECRET)
@@ -57,7 +60,7 @@ class VideoViewer extends React.Component {
       if (video.state === "LIVE") {
         this.player.start()
       } else {
-        this.player.getChatHistory()
+        this.player.getChatHistory(video.created_at)
       }
     }
   }
@@ -194,96 +197,92 @@ class VideoViewer extends React.Component {
     }
     
     const src = video.url
-    console.log(video)
 
-    const goods = video.data ? JSON.parse(video.data) : null
-    console.log(goods)
+    const goods = video.data ? JSON.parse(video.data) : {}
+    if(!goods.goods_list) {
+      goods.goods_list = Configs.SAMPLE_GOODS
+    }
 
     return (
-      <div className="container">
-        <div className="row video-viewer">
-          <div className="col-xl-12 video-info-group2 ">
-            <div className="video-info">
-              <div className="user-info">
-                {video.user_avatar_url !== '' ?
-                <img className="user-avatar" src={video.user_avatar_url} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> : 
-                <img className="user-avatar" src={Configs.DEFAULT_AVATAR} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> 
-                }
-                <span className="card-text text-muted user-name text-ellipsis">{video.user_name === '' ? '...' : video.user_name}</span>
-              </div>
-              <div className="video-title-group">
-                <h6 className="title">{video.title === '' ? 'No title' : video.title + `(${video.state})`}</h6>
-                <p className="content">{video.content === '' ? 'No content' : video.content}</p>
-              </div>
+      <div className="video-viewer-container">
+        <div className="video-viewer-wrap">
+          <div className="video-viewer-header">
+            <div className="video-title-group">
+              <h6 className="title">{video.title === '' ? 'No title' : video.title + `(${video.state})`}</h6>
+              <p>{video.content === '' ? 'No content' : video.content}</p>
             </div>
           </div>
-          <div className='col-xl-6' >
-           { video.state === 'LIVE' ? <p>HLS</p> : ''}
-            <div data-vjs-player>
-              <video ref={node => this.videoNode = node} className="video-js vjs-default-skin vjs-big-play-centered" controls playsInline x-webkit-ariplay="allow" webkit-playsinline="allow" preload="auto" autoPlay={true} muted data-setup='{"fluid": true}' poster={video.thumbnail_url} onTimeUpdate={this.onTimeUpdate}>
-                { src !== '' && src.indexOf('m3u8') > 0 ?
-                  <source type="application/x-mpegURL" src={src} /> :
-                  <source type="video/mp4" src={src} /> }
-              </video>
+          <div className="video-viewer">
+            <div className='video-view-group' >
+              <div className="video-live-group">
+                <div className={video.state === 'LIVE' ? "video-live-view-bg" : "video-vod-view-bg"}>
+                  { video.state === 'LIVE' ? <div className="video-badge"><LiveBadge /><HlsBadge /></div> : ''}
+                  <div data-vjs-player>
+                    <video ref={node => this.videoNode = node} className="video-js vjs-default-skin vjs-big-play-centered" controls playsInline x-webkit-ariplay="allow" webkit-playsinline="allow" preload="auto" autoPlay={true} muted data-setup='{"fluid": true}' poster={video.thumbnail_url} onTimeUpdate={this.onTimeUpdate}>
+                      { src !== '' && src.indexOf('m3u8') > 0 ?
+                        <source type="application/x-mpegURL" src={src} /> :
+                        <source type="video/mp4" src={src} /> }
+                    </video>
+                  </div>
+                </div>
+                {video.state === 'LIVE' ?
+                <div className="video-live-view-bg">
+                  <div className="video-badge"><LiveBadge /><WebrtcBadge /></div>
+                  <video id="screenvideo" width="100%" controls muted autoPlay playsInline></video>
+                </div>
+                : ''}
+              </div>
+              {video.state === 'LIVE' ?
+                goods && goods.goods_list ?
+                <div className="video-goods-group">
+                  <div className="row goods-list">
+                    {goods.goods_list.map((item, index) => (
+                      <GoodsItem key={index} item={item} />
+                    ))}
+                  </div>
+                </div> :
+                <div className="video-goods-group"> 
+                  <div className="row goods-list">
+                    <p className="text-muted">No goods data</p>
+                  </div>
+                </div> : '' }
+                {video.state === 'VOD' ?
+                goods && goods.goods_list ?
+                <div className="video-goods-group">
+                  <div className="row goods-list">
+                    {goods.goods_list.map((item, index) => (
+                      <GoodsItem key={index} item={item} />
+                    ))}
+                  </div>
+                </div> :
+                <div className="video-goods-group"> 
+                  <div className="row goods-list">
+                    <p className="text-muted">No goods data</p>
+                  </div>
+                </div> : '' }
+              {/* <div>
+                {this.videoNode && this.videoNode.muted ?
+                <button ref={node => this.unmuteButton = node} type="button" className="btn btn-raised btn-primary" onClick={this.toggleMute}>Unmute</button> :
+                <button type="button" className="btn btn-raised btn-secondary" onClick={this.toggleMute}>Mute</button> }
+              </div> */}
             </div>
-            <div style={{marginTop: '30px'}}>
-              {this.videoNode && this.videoNode.muted ?
-              <button ref={node => this.unmuteButton = node} type="button" className="btn btn-raised btn-primary" onClick={this.toggleMute}>Unmute</button> :
-              <button type="button" className="btn btn-raised btn-secondary" onClick={this.toggleMute}>Mute</button> }
-            </div>
-          </div>
-          {video.state === 'LIVE' ?
-          <div className="col-xl-6">
-            <p>WebRTC</p>
-            <video id="screenvideo" width="100%" controls muted autoPlay playsInline></video>                        
-          </div>
-          : ''}
-          {video.state === 'LIVE' ?
-            goods && goods.goods_list ?
-            <div className="col-xl-6 video-goods-group">
-              <div className="row" style={{justifyContent: 'left'}}>
-                {goods.goods_list.map((item, index) => (
-                  <GoodsItem key={index} item={item} />
-                ))}
-              </div>
-            </div> :
-            <div className="col-xl-6 video-goods-group"> 
-              <div className="row">
-                <p className="text-muted">No goods data</p>
-              </div>
-            </div> : '' }
-          <div className='video-info-group col-xl-6'>
-            {/* <div className="video-info">
-              <div className="user-info">
-                {video.user_avatar_url !== '' ?
-                <img className="user-avatar" src={video.user_avatar_url} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> : 
-                <img className="user-avatar" src={Configs.DEFAULT_AVATAR} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> 
-                }
-                <span className="card-text text-muted user-name text-ellipsis">{video.user_name === '' ? '...' : video.user_name}</span>
-              </div>
-              <div className="video-title-group">
-                <h6 className="title">{video.title === '' ? 'No title' : video.title}</h6>
-                <p className="content">{video.content === '' ? 'No content' : video.content}</p>
-              </div>
-            </div> */}
+              {/* <div className="video-info">
+                <div className="user-info">
+                  {video.user_avatar_url !== '' ?
+                  <img className="user-avatar" src={video.user_avatar_url} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> : 
+                  <img className="user-avatar" src={Configs.DEFAULT_AVATAR} alt={video.user_name === '' ? 'user avatar' : `${video.user_name} \\'s avatar'`}/> 
+                  }
+                  <span className="card-text text-muted user-name text-ellipsis">{video.user_name === '' ? '...' : video.user_name}</span>
+                </div>
+                <div className="video-title-group">
+                  <h6 className="title">{video.title === '' ? 'No title' : video.title}</h6>
+                  <p className="content">{video.content === '' ? 'No content' : video.content}</p>
+                </div>
+              </div> */}
             {video.state !== 'LIVE' ? 
-              <ChatList empty={this.state.messages.length === 0} messages={this.state.shown} /> :
-              <ChatForm empty={this.state.messages.length === 0} messages={this.state.messages} sendMessage={this.sendMessage}/>}
+              <div className='video-chat-group'><ChatList type="pc" empty={this.state.messages.length === 0} messages={this.state.shown} /></div> :
+              <div className="video-chat-form-group"><ChatForm type="pc" empty={this.state.messages.length === 0} messages={this.state.messages} sendMessage={this.sendMessage}/></div>}            
           </div>
-          {video.state === 'VOD' ?
-            goods && goods.goods_list ?
-            <div className="col-xl-12 video-goods-group">
-              <div className="row" style={{justifyContent: 'left'}}>
-                {goods.goods_list.map((item, index) => (
-                  <GoodsItem key={index} item={item} />
-                ))}
-              </div>
-            </div> :
-            <div className="col-xl-12 video-goods-group"> 
-              <div className="row">
-                <p className="text-muted">No goods data</p>
-              </div>
-            </div> : '' }
         </div>
       </div>
     )

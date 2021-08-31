@@ -1,0 +1,80 @@
+.video-stream-container .goods-item {
+  margin: 0;
+  padding: 0;
+  max-width: 124px;
+  text-align: left;
+}
+
+.video-stream-container .goods-item > title,
+.video-stream-container .goods-item > img {
+  width: 124px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.video-stream-container .goods-item > .title {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.video-stream-container .goods-item > p {
+  margin: 0;
+}
+
+.video-stream-container .goods-item .price {
+  font-size: 12px;
+  font-weight: 300;
+  color: #888;
+}
+
+.video-stream-container .video-view-bg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #222222;
+  width: 640px;
+  height: 640px;
+}
+
+.video-stream-container .video-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+}
+
+.video-stream-container .video-chat-group {
+  width: 490px;
+}
+
+.video-stream-container .video-chat-group .chat-group {
+  padding: 0;
+  text-align: left;
+}
+
+.video-stream-container .video-chat {
+  padding: 0;
+}
+.video-stream-container .video-chat-group .chat-group .list-group-item {
+  padding: 0;
+  padding-bottom: 10px;
+}
+
+.video-stream-container .video-chat-group .video-chat {
+  height: 100%;
+  padding-right: 20px;
+}
+
+.video-stream-container .video-chat-group .video-chat-list {
+  height: calc(100% - 60px);
+}
+
+.video-stream-container .video-chat-group {
+  height: 640px;
+  border: solid 1px #e0e4e7;
+  padding: 20px;
+  padding-right: 0;
+}

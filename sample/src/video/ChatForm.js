@@ -1,5 +1,6 @@
 import React from 'react'
 import ChatItem from './ChatItem'
+import Send from '../svg/Send'
 
 class ChatForm extends React.Component {
 
@@ -8,12 +9,9 @@ class ChatForm extends React.Component {
     message: ''
   }
 
-  componentDidMount = () => {
-  }
-
   onChange = (e) => {
     const { value } = e.currentTarget
-    console.log(value)
+    // console.log(value)
     this.setState({ message: value })
   }
 
@@ -34,37 +32,56 @@ class ChatForm extends React.Component {
 		}
   }
 
+  shouldComponentUpdate(nextProps, nextState) { 
+    if (nextProps.messages.length !== this.props.messages.length) { 
+      if (this.scroller) {
+        this.scroller.scrollIntoView({block: "end"});
+      }
+      return true; 
+    }
+    if (nextState.message !== this.state.message) {
+      return true;
+    }
+    return false;
+  } 
+
   render() {
     // console.log(this.props.messages)
     let items
-    
+    const { message } = this.state
+    const { type } = this.props
+
     if (this.props.messages.length > 0) {
       items = this.props.messages.map((m, index) => (
-        <ChatItem key={index} message={m} />
+        <ChatItem type={type} key={index} message={m} />
       ))
     } else {
       const no_message = {
         message: 'Preparing for chat messages...'
       }
-      items = <ChatItem key={0} message={no_message} />
+      items = <ChatItem type={type} key={0} message={no_message} />
     }
 
     return (
       <div className="video-chat-group">
         <div className="video-chat">
-          <div id="message-scroller" className="list-group chat-group">
+          <div id="message-scroller" ref={ scroller => this.scroller = scroller } className="list-group chat-group">
             { this.props.empty ? 
-            <ChatItem key={0} message={{
+            <ChatItem type={type} key={0} message={{
               message: 'There are no chat messages.'
             }} /> :
             items }
           </div>
         </div>
-        <div className="video-chat-input input-group mb-3">
+        <div className="video-chat-input input-group">
           <input type="text" className="form-control" placeholder="Messages to send" aria-label="Messages to send" aria-describedby="basic-addon2" value={this.state.message} onChange={this.onChange} onKeyPress={this.onKeyDown} />
+          { message.length > 0 ? 
           <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" onClick={this.send}>Send</button>
-          </div>
+            <button className="btn btn-outline-secondary" type="button" onClick={this.send}>{type === "pc" && <Send />}<span>Send</span></button>
+          </div> : 
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary disabled" type="button">{type === "pc" && <Send />}<span>Send</span></button>
+          </div> }
         </div>
       </div>
     )

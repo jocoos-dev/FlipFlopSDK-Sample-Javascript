@@ -1,0 +1,244 @@
+html,
+body,
+#root,
+.App,
+.content {
+  height: 100%;
+}
+
+.mobile-viewer .video-chat-input,
+.mobile-viewer .video-info,
+.mobile-viewer .video-chat {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.container.mobile-container {
+  min-width: 360px;
+  min-height: 640px;
+  width: calc(100vh * 0.5625);
+  height: 100%;
+}
+
+.mobile-viewer {
+  position: relative;
+  height: 100%;
+  margin: 0;
+}
+
+.video-header,
+.video-group,
+.video-body,
+.video-header {
+  padding: 0;
+  box-shadow: none;
+  width: 100%;
+}
+
+.video-header {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 2%, rgba(0, 0, 0, 0));
+  height: 50%;
+}
+
+.video-body {
+  padding: 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 2%, rgba(0, 0, 0, 0));
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.gossip-group {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 10px 16px;
+}
+
+.video-chat-group {
+  height: 100%;
+}
+
+.video-chat {
+  height: calc(100% - 140px);
+  overflow-y: scroll;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  opacity: 1;
+}
+
+.video-title-group {
+  text-align: left;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.video-title-group > p {
+  margin: 0;
+}
+
+.video-info .user-name {
+  margin: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.video-info .user-name > svg {
+  margin-left: 5px;
+}
+
+.goods-group {
+  position: absolute;
+  bottom: 80px;
+  left: 16px;
+}
+
+.mobile-viewer .goods-item {
+  display: flex;
+  background-color: #fff;
+  border-radius: 5px;
+  min-width: 264px;
+  height: 60px;
+  padding: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.mobile-viewer .goods-item > img {
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+}
+
+.mobile-viewer .goods-item .goods-info {
+  padding: 9px;
+}
+
+.mobile-viewer .goods-item .goods-info .title {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+  text-align: left;
+}
+
+.mobile-viewer .goods-item .goods-price-group {
+  font-weight: bold;
+}
+
+.mobile-viewer .goods-item .goods-info .price {
+  font-size: 14px;
+  color: #000;
+}
+
+.mobile-viewer .goods-item .goods-info .discount {
+  font-size: 12px;
+  color: #fe5c00;
+  margin: 0 5px;
+}
+
+.mobile-viewer .goods-item .goods-group {
+  display: flex;
+  align-items: baseline;
+}
+
+.live-badge {
+  color: #fff;
+  font-size: 10px;
+  background-color: #000;
+  padding: 2px 3px;
+}
+
+.goods-count-badge {
+  background-color: #fe5c00;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  padding: 5px;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: -10px;
+  margin-top: -10px;
+}
+
+.mobile-viewer .video-chat-group .form-control {
+  border: 1px solid #fff;
+  border-right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: none;
+  padding: 10px;
+  color: #fff;
+}
+
+.btn.btn-outline-secondary:hover,
+.btn.btn-outline-secondary {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #fff;
+  border-left: 0;
+}
+
+.btn.btn-outline-secondary.disabled:hover,
+.btn.btn-outline-secondary.disabled {
+  color: transparent;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #fff;
+  border-left: 0;
+  opacity: 1;
+}
+
+.mobile-viewer .video-chat-group .video-chat-input {
+  padding: 16px 0;
+  margin-top: 70px;
+}
+
+.mobile-viewer .video-chat-group button {
+  margin: 0;
+}
+
+.mobile-viewer .list-group-item .list-group-item-text {
+  font-size: 12px;
+  color: #fff;
+  max-width: 80%;
+  text-align: left;
+}
+
+.mobile-viewer .list-group-item .message-content,
+.mobile-viewer .list-group-item .message-user {
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.mobile-viewer .list-group-item .message-user {
+  font-weight: bold;
+}
+
+.mobile-viewer .list-group-item .list-group-item-text.system-message {
+  color: #fff;
+}
+
+.message-content {
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-top-left-radius: 0;
+}

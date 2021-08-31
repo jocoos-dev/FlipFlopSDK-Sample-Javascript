@@ -7,7 +7,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "flipflop-sdk-javascript-dev": "^1.0.0",
+    "flipflop-sdk-javascript": "^1.0.3",
     "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "querystring": "^0.2.0",
@@ -25,9 +25,7 @@
   },
   "scripts": {
     "start": "REACT_APP_STAGE=local react-scripts start",
-    "start:dev": "REACT_APP_STAGE=dev-test react-scripts start",
-    "build": "REACT_APP_STAGE=dev react-scripts build",
-    "build:prod": "REACT_APP_STAGE=prod react-scripts build",
+    "build": "REACT_APP_STAGE=local react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
