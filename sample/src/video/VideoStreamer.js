@@ -5,8 +5,13 @@ import VideoGoodsSelector from './VideoGoodsSelector';
 import { bindActionCreators } from 'redux';
 import { actions as videoActions } from '../modules/video';
 import { connect } from 'react-redux';
-import { FlipFlop } from 'flipflop-sdk-javascript-dev/dist/flipflop'
-
+import { FlipFlop } from 'flipflop-sdk-javascript/dist/flipflop'
+import Play from '../svg/Play'
+import Stop from '../svg/Stop'
+import FormBullet from '../svg/FormBullet'
+import LiveBadge from '../svg/LiveBadge';
+import { isWebRTCSupported } from '../support/browser'
+import "./VideoStreamer.css"
 
 const PARAM_APP_KEY = 'appKey'
 const PARAM_APP_SECRET = 'appSecret'
@@ -26,6 +31,10 @@ class VideoStreamer extends React.Component {
   }
 
   componentDidMount = () => {    
+    if(!isWebRTCSupported()) {
+     alert("browser doesn't support webrtc")
+    };
+
     this.initToken()
   }
   
@@ -39,8 +48,8 @@ class VideoStreamer extends React.Component {
       return;
     }
 
-    const userId = localStorage.getItem('demo.user_id');
-    const userName = localStorage.getItem('demo.user_name');
+    const userId = localStorage.getItem('demo.user_id') || "12345"
+    const userName = localStorage.getItem('demo.user_name') || "test1"
 
     console.log(`appKey: ${appKey}, appSecret: ${appSecret}, userId: ${userId}, userName: ${userName}`);
 
@@ -90,6 +99,10 @@ class VideoStreamer extends React.Component {
   }
 
   stop = () => {
+    if (!window.confirm('Do you want to stop LIVE?')) {
+      return
+    }
+    
     if (this.streamer) {
       this.streamer.stop()
     }
@@ -133,17 +146,17 @@ class VideoStreamer extends React.Component {
   
   onPrepare = () => {
     console.log('onPrepare')
-    this.setStreamState('ready')
+    this.setStreamState('Ready')
   }
 
   onStart = (streamName) => {
     console.log(`onStart: ${streamName}`)
-    this.setStreamState('started')
+    this.setStreamState('Started')
   }
 
-  onStopped = () => {
+  onStop = () => {
     console.log(`onStopped`)
-    this.setStreamState('stopped')
+    this.setStreamState('Stopped')
   }
 
   onCompleted = () => {
@@ -173,34 +186,35 @@ class VideoStreamer extends React.Component {
     console.log(video)
 
     return (
-      <div className="container-fluid">
-        <div className="row video-viewer">
-          <div className="col-xl-6">
-            <video id="screenvideo" className="stream-video" ref={node => this.videoNode = node } width="100%" autoPlay playsInline></video>
-            <div>
-              <VideoGoodsSelector items={this.state.items} onClick={this.onClick} />
+      <div className="video-stream-container">
+        <div className="video-stream-group">
+          <div className="video-viewer-header">
+            <div className="video-title-group">
+              <h6 className="title">{video.title}</h6>
+              <p>{video.content}</p>
+              <div><span className="content"><FormBullet/>{`User ID:${video.user_id}`}</span><span className="content"><FormBullet/>{`Stream state: ${streamState}`}</span></div>
             </div>
-            { streamState === 'ready' ? 
-            <button type="button" className="btn btn-raised btn-primary" onClick={this.start} style={{marginTop: '30px'}}>Start Live</button> : 
-              streamState === 'started' ?
-            <button type="button" className="btn btn-raised btn-secondary" onClick={this.stop} style={{marginTop: '30px'}}>Stop Live</button> :
-              streamState === 'stopped' ? 
-            <button type="button" className="btn btn-raised btn-primary" onClick={this.prepare} style={{marginTop: '30px'}}>Prepare</button> : ''}
+            <div className="video-button-group">
+              {streamState === 'Ready' ? 
+                <button type="button" className="common-button large-button red-button" onClick={this.start}><Play />Start Live</button> : 
+                  streamState === 'Started' ?
+                <button type="button" className="common-button large-button white-button" onClick={this.stop}><Stop /><span>Stop Live</span></button> :
+                  streamState === 'Stopped' && ''}
+            </div>
           </div>
-          <div className="col-xl-6 video-info-group">
-            <div className="video-info">
-              <div className="user-info">
-                <img className="user-avatar" src={video.user_avatar_url} alt={`${video.user_name} \\'s avatar'`}/>
-                <span className="card-text text-muted user-name text-ellipsis">{video.user_name}</span>
+          <div className="video-viewer">
+            <div className="video-view-group">
+              <div className="video-view-bg">
+                {streamState === 'Started' && <div className="video-badge"><LiveBadge /></div>}
+                <video id="screenvideo" className="stream-video" ref={node => this.videoNode = node } width="100%" autoPlay playsInline></video>
               </div>
-              <div className="video-title-group">
-                <h6 className="title">{video.title}</h6>
-                <p className="text-muted">{video.content}</p>
-                <p className="text-muted">{`user id: ${video.user_id}`}</p>
-                <p className="text-muted">{`stream state: ${streamState}`}</p>
+              <div>
+                <VideoGoodsSelector items={this.state.items} onClick={this.onClick} />
               </div>
             </div>
-            <ChatList messages={messages} />
+            <div className="video-chat-group">
+              <ChatList type="pc" messages={messages} />
+            </div>
           </div>
         </div>
       </div>

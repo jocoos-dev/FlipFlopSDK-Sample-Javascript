@@ -8,7 +8,6 @@ export default class Logout extends React.Component {
   getUserid = () => {
     const userId = localStorage.getItem('demo.user_id')
     if (userId === '' || userId === undefined) {
-      console.warn('acess token not found');
       alert('acess token not found');
       return
     }

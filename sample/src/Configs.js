@@ -1,7 +1,8 @@
 
 class ApiEnv {
-  constructor(url) {
+  constructor(url, basicToken) {
     this.url = url
+    this.basicToken = basicToken
   }
 }
 
@@ -27,25 +28,25 @@ class MediaEnv {
 }
 
 const locals = new Env(
-  new ApiEnv('http://localhost:28080'),
-  new MediaEnv('http://localhost:28080'),
-  new GossipEnv('ws://192.168.0.79:8080/gossip', '0V2c0FGcwFjOhJDM1EjM'),
+  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
+  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
+  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
 
 const devTests = new Env(
-  new ApiEnv('https://flipflop-dev.jocoos.com'),
-  new MediaEnv('wss://media-dev.jocoos.com:7188/janus'),
-  new GossipEnv('wss://media-dev.jocoos.com:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
+  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
+  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
+  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
 
 const devs = new Env(
-  new ApiEnv(window.location.origin),
-  new MediaEnv('wss://media-dev.jocoos.com:7188/janus'),
-  new GossipEnv('wss://media-dev.jocoos.com:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
+  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
+  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
+  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
 
 const prods = new Env(
-  new ApiEnv(window.location.origin),
+  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
   new MediaEnv('wss://media.flipflop.tv:7188/janus'),
   new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
@@ -64,5 +65,6 @@ export default {
     {id: 3, title: '[밀리마쥬] 무료배송 베스풀 블러셔', price: 12000, thumbnail_url: 'https://shop-phinf.pstatic.net/20180319_79/hcmnt01_1521432991594x1Rtm_JPEG/44740151216675877_466425841.jpg?type=m450'},
     {id: 4, title: '려 자양윤모 트리트먼트 200ml', price: 5000, thumbnail_url: 'https://shop-phinf.pstatic.net/20190510_295/outrun_1557451917414UQYjN_JPEG/80758218041478328_924887128.jpg?type=m510'},
     {id: 5, title: '[3CE] 벨벳 립 틴트 4g', price: 9170, thumbnail_url: 'https://shop-phinf.pstatic.net/20181228_46/skintoktalk_1545962390562vaoSw_JPEG/28593570204060548_313533979.jpg?type=m510'},
-  ]
+  ],
+  MOBILE_WIDTH: 375
 }
