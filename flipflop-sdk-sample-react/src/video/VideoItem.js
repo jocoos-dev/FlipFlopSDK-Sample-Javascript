@@ -9,6 +9,10 @@ class VideoItem extends React.Component {
       JSON.stringify(this.props.video))
   }
 
+  onErrorThubnail = (e) => {
+    e.target.src = Configs.DEFAULT_THUMBNAIL;
+  }
+
   render() {
     const { video } = this.props
     console.log("video", video.user.username)
@@ -22,9 +26,7 @@ class VideoItem extends React.Component {
       <div className="col-xl-4">
         <div className="card feed-post">
           <a className="thumbnail-box" href={this.props.link} target="_blank" rel="noopener noreferrer" onClick={this.setVideo}>
-            { video.title && video.title.startsWith('Sample Live title...') ? 
-            <div className="card-img-top" style={thumbnailStyle} /> : 
-            <img className="card-img-top" src={video.thumbnail_url} alt={video.title + 'thumbnail'} /> }
+            <img className="card-img-top" src={video.thumbnail_url} alt={video.title + 'thumbnail'} onError={this.onErrorThubnail}/>
             <div className="play-overlay">
               <i className="material-icons-round">play_arrow</i>
             </div>

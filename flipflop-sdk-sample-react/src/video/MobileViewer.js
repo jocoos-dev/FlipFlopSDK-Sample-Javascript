@@ -114,7 +114,7 @@ class MobileViewer extends React.Component {
     console.log('onStart')
   }
 
-  onStopped = () => {
+  onStop = () => {
     console.log(`onStopped`)
   }
 

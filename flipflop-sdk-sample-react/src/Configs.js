@@ -28,21 +28,21 @@ class MediaEnv {
 }
 
 const locals = new Env(
-  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
-  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
-  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
+  new ApiEnv('http://localhost:28080', 'Basic dGVzdGFwcDU6dGVzdGFwcHNlY3JldDU='),
+  new MediaEnv('http://localhost:28080'),
+  new GossipEnv('ws://192.168.0.79:8080/gossip', '0V2c0FGcwFjOhJDM1EjM'),
 )
 
 const devTests = new Env(
-  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
-  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
-  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
+  new ApiEnv('https://flipflop-dev2.jocoos.com', 'Basic dGVzdGFwcDU6dGVzdGFwcHNlY3JldDU='),
+  new MediaEnv('wss://media-dev.flipflop.tv/janus'),
+  new GossipEnv('wss://media-dev.jocoos.com:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
 
 const devs = new Env(
-  new ApiEnv(window.location.origin, 'Basic NzVGNTE4OTE3NToyMDdERTkwMS0zNTU4LTQwMTAtODFDOC0xRjdDNENGMjU0NzI='),
-  new MediaEnv('wss://media.flipflop.tv:7188/janus'),
-  new GossipEnv('wss://media.flipflop.tv:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
+  new ApiEnv(window.location.origin, 'Basic dGVzdGFwcDU6dGVzdGFwcHNlY3JldDU='),
+  new MediaEnv('wss://media-dev.flipflop.tv/janus'),
+  new GossipEnv('wss://media-dev.jocoos.com:8100/gossip', '0V2c0FGcwFjOhJDM1EjM')
 )
 
 const prods = new Env(

@@ -1,5 +1,4 @@
 import React from 'react';
-import 'video.js/dist/video-js.css';
 import 'video.js';
 import ChatList from './ChatList';
 import moment from 'moment';
@@ -12,8 +11,10 @@ import { FlipFlop } from 'flipflop-sdk-javascript/dist/flipflop'
 import LiveBadge from '../svg/LiveBadge';
 import HlsBadge from '../svg/HlsBadge';
 import "./VideoViewer.css"
+import 'video.js/dist/video-js.css';
 import WebrtcBadge from '../svg/WebrtcBadge';
 import Configs from '../Configs';
+import VideoPlayer from './VideoPlayer'
 
 
 const PARAM_APP_KEY = 'appKey'
@@ -43,9 +44,10 @@ class VideoViewer extends React.Component {
       alert('appKey and appSecret parameters are required');
       return;
     }
-
-    const userId = localStorage.getItem('demo.user_id');
-    const userName = localStorage.getItem('demo.user_name');
+    
+    const randomUserId = Math.floor(Math.random() * 10001)
+    let userId = randomUserId
+    let userName = 'user-' + randomUserId
 
     console.log(`appKey: ${appKey}, appSecret: ${appSecret}, userId: ${userId}, userName: ${userName}`);
 
@@ -87,7 +89,7 @@ class VideoViewer extends React.Component {
     console.log('onStart')
   }
 
-  onStopped = () => {
+  onStop = () => {
     console.log(`onStopped`)
   }
 
@@ -217,13 +219,7 @@ class VideoViewer extends React.Component {
               <div className="video-live-group">
                 <div className={video.state === 'LIVE' ? "video-live-view-bg" : "video-vod-view-bg"}>
                   { video.state === 'LIVE' ? <div className="video-badge"><LiveBadge /><HlsBadge /></div> : ''}
-                  <div data-vjs-player>
-                    <video ref={node => this.videoNode = node} className="video-js vjs-default-skin vjs-big-play-centered" controls playsInline x-webkit-ariplay="allow" webkit-playsinline="allow" preload="auto" autoPlay={true} muted data-setup='{"fluid": true}' poster={video.thumbnail_url} onTimeUpdate={this.onTimeUpdate}>
-                      { src !== '' && src.indexOf('m3u8') > 0 ?
-                        <source type="application/x-mpegURL" src={src} /> :
-                        <source type="video/mp4" src={src} /> }
-                    </video>
-                  </div>
+                    <><VideoPlayer src={video?.url || ""} autoPlay={true} controls={false} onTimeUpdate={this.onTimeUpdate}/></>
                 </div>
                 {video.state === 'LIVE' ?
                 <div className="video-live-view-bg">
@@ -291,7 +287,8 @@ class VideoViewer extends React.Component {
 
 export default connect(
 	({ video }) => ({
-    sdk: video.sdk
+    sdk: video.sdk,
+    player: video.player
   }),
 	(dispatch) => ({
     actions: bindActionCreators(videoActions, dispatch)

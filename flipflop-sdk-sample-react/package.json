@@ -1,13 +1,13 @@
 {
-  "name": "flipflop-sdk-sample",
-  "version": "0.1.0",
+  "name": "sample",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "flipflop-sdk-javascript": "^1.0.3",
+    "flipflop-sdk-javascript": "file:../../sdk",
     "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "querystring": "^0.2.0",
@@ -19,13 +19,18 @@
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
     "stompjs": "^2.3.3",
-    "video.js": "^7.7.5",
+    "video.js": "^7.15.4",
     "webrtc-adapter": "^7.5.1",
     "websocket": "^1.0.31"
   },
   "scripts": {
     "start": "REACT_APP_STAGE=local react-scripts start",
-    "build": "REACT_APP_STAGE=local react-scripts build",
+    "start:dev": "cd ../sdk && npm run build:local && cd ../sample && REACT_APP_STAGE=dev-test react-scripts start",
+    "build:dev": "REACT_APP_STAGE=dev react-scripts build",
+    "build:prod": "REACT_APP_STAGE=prod react-scripts build",
+    "start:local-nested": "cd ../sdk && npm run build:local && cd ../sample && npm run start:dev",
+    "build:dev-nested": "cd ../sdk && npm run build:dev && cd ../sample && npm run build:dev",
+    "build:prod-nested": "cd ../sdk && npm run build:prod && cd ../sample && npm run build:prod",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

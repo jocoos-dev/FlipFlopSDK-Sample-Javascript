@@ -11,6 +11,10 @@ import configureConnection from './connection/ConfigureConnection'
 const history = createBrowserHistory();
 const store = configureConnection();
 
+if (process.env.REACT_APP_STAGE === 'prod') {
+  console.log = function() {};
+}
+
 ReactDOM.render(  
     <React.StrictMode>
       <Provider store={store} >

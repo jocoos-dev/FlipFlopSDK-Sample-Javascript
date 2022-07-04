@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { FlipFlop } from 'flipflop-sdk-javascript/dist/flipflop'
 import Play from '../svg/Play'
 import Stop from '../svg/Stop'
+import LiveView from '../svg/LiveView'
 import FormBullet from '../svg/FormBullet'
 import LiveBadge from '../svg/LiveBadge';
 import { isWebRTCSupported } from '../support/browser'
@@ -24,6 +25,7 @@ class VideoStreamer extends React.Component {
 
   state = {
     video: null,
+    videoKey: "",
     streamState: 'initialized',
     messages: [],
     itemKeys: [],
@@ -47,9 +49,20 @@ class VideoStreamer extends React.Component {
       alert('appKey and appSecret parameters are required');
       return;
     }
+    
+    const randomUserId = Math.floor(Math.random() * 10001)
+    let userId = localStorage.getItem('demo.user_id')
+    let userName = localStorage.getItem('demo.user_name')
 
-    const userId = localStorage.getItem('demo.user_id') || "12345"
-    const userName = localStorage.getItem('demo.user_name') || "test1"
+    if(!userId) {
+      userId = randomUserId
+      localStorage.setItem('demo.user_id', userId);
+    }
+
+    if(!userName) {
+      userName = 'user-' + randomUserId
+      localStorage.setItem('demo.user_name', userName);
+    }
 
     console.log(`appKey: ${appKey}, appSecret: ${appSecret}, userId: ${userId}, userName: ${userName}`);
 
@@ -120,8 +133,21 @@ class VideoStreamer extends React.Component {
         JSON.stringify({goods_list: items})
       )
 
-      console.log(video)
+      this.setState({videoKey: video.video_key})
+
+      video.state = "LIVE"
+
+      localStorage.setItem('demo.video', 
+        JSON.stringify(video))
     }
+  }
+
+  viewLive = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const appKey = urlParams.get(PARAM_APP_KEY)
+    const appSecret = urlParams.get(PARAM_APP_SECRET)
+
+    window.open(`/videos/${this.state.videoKey}?appKey=${appKey}&appSecret=${appSecret}`);
   }
 
   prepare = () => {
@@ -183,7 +209,6 @@ class VideoStreamer extends React.Component {
     }
 
     const { video, streamState, messages } = this.state
-    console.log(video)
 
     return (
       <div className="video-stream-container">
@@ -198,7 +223,10 @@ class VideoStreamer extends React.Component {
               {streamState === 'Ready' ? 
                 <button type="button" className="common-button large-button red-button" onClick={this.start}><Play />Start Live</button> : 
                   streamState === 'Started' ?
-                <button type="button" className="common-button large-button white-button" onClick={this.stop}><Stop /><span>Stop Live</span></button> :
+                    <div style={{display: 'flex'}}>
+                      <button type="button" className="common-button large-button white-button" onClick={this.viewLive} style={{marginRight: '5px'}} ><LiveView /><span>View Live</span></button>
+                      <button type="button" className="common-button large-button white-button" onClick={this.stop}><Stop /><span>Stop Live</span></button>
+                    </div> :
                   streamState === 'Stopped' && ''}
             </div>
           </div>

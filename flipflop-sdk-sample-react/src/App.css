@@ -97,7 +97,9 @@ body {
 }
 
 .feed-post .thumbnail-box {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   line-height: 0;
   min-height: 300px;
